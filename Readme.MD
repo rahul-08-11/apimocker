@@ -1,7 +1,7 @@
 # MockCloud
 
 MockCloud is a self-hosted mock API platform for internal use.  
-[▶ Watch Demo](https://github.com/user-attachments/assets/d8a31fec-2de4-450a-b8c0-dceb581063a0)
+[![▶ Watch Demo](https://img.shields.io/badge/Watch-Demo-red?style=for-the-badge&logo=github)](https://github.com/user-attachments/assets/d8a31fec-2de4-450a-b8c0-dceb581063a0)
 Users upload route configs from the UI and consume endpoints under:
 
 `/mock/<workspace-id>/...`
