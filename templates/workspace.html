@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ workspace.name }} · {{ app_name }}</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header class="header">
+        <div>
+          <a href="/" class="back">← Home</a>
+          <div class="brand">{{ workspace.name }}</div>
+          <div class="muted">
+            User ID: <code>{{ workspace.user_id }}</code>
+          </div>
+        </div>
+        <div class="pill">
+          Mock base:
+          <code>{{ mock_base }}</code>
+        </div>
+      </header>
+
+      <section class="card">
+        <h2>Mock URL</h2>
+        <div class="row">
+          <div class="muted">Base:</div>
+          <code class="grow">{{ mock_base_url }}/&lt;path&gt;</code>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Upload config</h2>
+        {% if error %}
+          <div class="alert">
+            <strong>Save failed:</strong> {{ error }}
+          </div>
+        {% endif %}
+        {% if ok %}
+          <div class="alert" style="background: rgba(34,197,94,0.12);">
+            <strong>{{ ok }}</strong>
+          </div>
+        {% endif %}
+        {% if not is_admin %}
+          <div class="alert">
+            You can view routes, but you’re <strong>not an admin</strong> for this workspace in this browser.
+            Create a new workspace on the home page (or open this workspace in the browser that created it).
+          </div>
+        {% endif %}
+
+        <form method="post" action="/w/{{ workspace.user_id }}/upload" enctype="multipart/form-data" class="stack">
+          <label class="field">
+            <div class="label">Upload JSON file</div>
+            <input type="file" name="file" accept="application/json,.json" {% if not is_admin %}disabled{% endif %} />
+          </label>
+
+          <div class="muted center">or paste JSON</div>
+
+          <label class="field">
+            <div class="label">Config JSON (array of routes)</div>
+            <textarea name="config_text" rows="12" placeholder='[{"method":"GET","path":"/users","status":200,"response":[...]}]' {% if not is_admin %}disabled{% endif %}>{{ config_json }}</textarea>
+          </label>
+          <div class="muted">
+            Tip: if you upload a file, it will be used (the textarea is ignored).
+          </div>
+
+          <div class="row">
+            <button type="submit" {% if not is_admin %}disabled{% endif %}>Save routes</button>
+            <a class="button secondary" href="/api/w/{{ workspace.user_id }}/routes" target="_blank">View JSON</a>
+          </div>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>Routes ({{ routes | length }})</h2>
+        {% if routes | length == 0 %}
+          <p class="muted">No routes yet. Upload your <code>mock.json</code> to start.</p>
+        {% else %}
+          <div class="table">
+            <div class="thead">
+              <div>Method</div>
+              <div>Path</div>
+              <div>Status</div>
+              <div>Delay</div>
+            </div>
+            {% for r in routes %}
+              <div class="trow">
+                <div><code>{{ r.method }}</code></div>
+                <div><code>{{ r.path }}</code></div>
+                <div><code>{{ r.status }}</code></div>
+                <div class="muted">{{ r.delay_ms }}ms</div>
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </section>
+    </main>
+  </body>
+</html>
+

@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{{ app_name }}</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="container">
+      <header class="header">
+        <div>
+          <div class="brand">{{ app_name }}</div>
+          <div class="muted">Upload a JSON config and get a per-user mock base URL.</div>
+        </div>
+      </header>
+
+      <section class="card">
+        <h2>Create a workspace</h2>
+        <p class="muted">
+          Create a workspace to get a unique mock base URL and manage your route config from the UI.
+        </p>
+        <form method="post" action="/workspaces" class="row">
+          <label class="field">
+            <div class="label">Workspace name</div>
+            <input name="name" placeholder="My workspace" />
+          </label>
+          <button type="submit">Create</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>Open an existing workspace</h2>
+        <p class="muted">Paste a workspace ID to reopen it.</p>
+        <form method="get" action="/go" class="row">
+          <label class="field">
+            <div class="label">Workspace ID</div>
+            <input name="workspace_id" placeholder="e.g. GG-6fA_iQnUBuw" />
+          </label>
+          <button type="submit">Open</button>
+        </form>
+      </section>
+
+      {% if recents and recents | length > 0 %}
+      <section class="card">
+        <h2>Recent workspaces</h2>
+        <ul class="list">
+          {% for w in recents %}
+            <li>
+              <strong>{{ w.name }}</strong>
+              <span class="muted"> · </span>
+              <a href="/w/{{ w.user_id }}" class="back"><code>{{ w.user_id }}</code></a>
+            </li>
+          {% endfor %}
+        </ul>
+      </section>
+      {% endif %}
+
+      {% if all_workspaces and all_workspaces | length > 0 %}
+      <section class="card">
+        <h2>All workspaces (from DB)</h2>
+        <ul class="list">
+          {% for w in all_workspaces %}
+            <li>
+              <strong>{{ w.name }}</strong>
+              <span class="muted"> · </span>
+              <a href="/w/{{ w.user_id }}" class="back"><code>{{ w.user_id }}</code></a>
+              <span class="muted"> · {{ w.created_at_utc }}</span>
+            </li>
+          {% endfor %}
+        </ul>
+      </section>
+      {% endif %}
+
+      <section class="card">
+        <h2>How it works</h2>
+        <ul class="list">
+          <li><strong>Step 1 - Create workspace</strong>: click <em>Create</em> and open your workspace page.</li>
+          <li><strong>Step 2 - Add config</strong>: upload or paste a JSON route array (same format as <code>mock.json</code>).</li>
+          <li><strong>Step 3 - Call mock APIs</strong>: use URLs like <code>/mock/&lt;user-id&gt;/users/1?include=posts</code>.</li>
+          <li><strong>Step 4 - Update anytime</strong>: edit and save config again; routes are replaced instantly for that workspace.</li>
+          <li><strong>Step 5 - Deploy</strong>: host on Railway to share mock endpoints over the internet.</li>
+        </ul>
+      </section>
+    </main>
+  </body>
+</html>
+
