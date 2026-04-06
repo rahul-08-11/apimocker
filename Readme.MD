@@ -1,7 +1,7 @@
 # MockCloud
 
 MockCloud is a self-hosted mock API platform for internal use.  
-<video src="https://github.com/user-attachments/assets/d8a31fec-2de4-450a-b8c0-dceb581063a0" controls width="100%"></video>
+[![Demo Video](thumbnail.png)](https://github.com/user-attachments/assets/d8a31fec-2de4-450a-b8c0-dceb581063a0)
 
 Users upload route configs from the UI and consume endpoints under:
 
